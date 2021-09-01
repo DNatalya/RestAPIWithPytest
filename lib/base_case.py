@@ -1,4 +1,4 @@
-
+import string, random
 import json.decoder
 import json
 from datetime import datetime
@@ -24,15 +24,28 @@ class BaseCase:
         assert name in response_as_dict, f"Response JSON doesn't have {name}"
         return response_as_dict[name]
 
-    def prepare_registration_data(self, email=None):
+    def get_random_string(self, count_symbols=10):
+        alphabet = string.ascii_lowercase + string.digits
+        return ''.join([random.choice(alphabet) for i in range(count_symbols)])
+
+    def prepare_registration_data(self, email=None, password=None, username=None, firstName=None, lastName=None):
         if email is None:
             base_part = 'learnqa'
             domain = 'example.com'
             random_part = datetime.now().strftime("%m%d%Y%H%M%S")
             email = f"{base_part}{random_part}@{domain}"
+        if password is None:
+            password = self.get_random_string(4)
+        if username is None:
+            username = self.get_random_string(6)
+        if firstName is None:
+            firstName = self.get_random_string(8)
+        if lastName is None:
+            lastName = self.get_random_string(10)
         return {
-            'password': '123',
-            'username': 'learnqa',
-            'firstName': 'learnqa',
-            'lastName': 'learnqa',
+            'password': password,
+            'username': username,
+            'firstName': firstName,
+            'lastName': lastName,
             'email': email}
+
