@@ -29,6 +29,8 @@ class TestUserDelete(BaseCase):
         self.token = self.get_header(response1, "x-csrf-token")
 
     @allure.description("Test for failed delete user")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.feature('Delete user', 'auth')
     def test_fail_delete_user(self):
         data = {
             "email": 'vinkotov@example.com',
@@ -46,6 +48,8 @@ class TestUserDelete(BaseCase):
         Assertions.assert_response_content(response, "Please, do not delete test users with ID 1, 2, 3, 4 or 5.")
 
     @allure.description("Test for successful delete user")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.feature('Delete user', 'auth')
     def test_successful_delete_user(self):
         response2 = RequestsHelper.delete(url=f"/user/{self.user_id}",
                                           headers={"x-csrf-token": self.token}, cookies={"auth_sid": self.auth_sid})
@@ -56,6 +60,8 @@ class TestUserDelete(BaseCase):
         Assertions.assert_response_content(response3, "User not found")
 
     @allure.description("Test for failed delete user auth as other user")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.feature('Create user', 'Delete user', 'auth')
     def test_fail_delete_user_auth_as_other_user(self):
         register_data1 = self.prepare_registration_data()
         response2 = RequestsHelper.post(url="/user/", data=register_data1)

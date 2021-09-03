@@ -20,6 +20,8 @@ class TestUserGet(BaseCase):
         self.user_id_from_auth_method = self.get_json_value(response1, "user_id")
 
     @allure.description("Test for get user details without auth")
+    @allure.severity(allure.severity_level.NORMAL)
+    @allure.feature('Get user details')
     def test_get_user_details_not_auth(self):
         response = RequestsHelper.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
@@ -28,6 +30,8 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_no_key(response, "lastName")
 
     @allure.description("Test for get user details with auth")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.feature('Get user details', 'auth')
     def test_get_user_details_auth_as_same_user(self):
         response = RequestsHelper.get(f"/user/{self.user_id_from_auth_method}",
                                       headers={"x-csrf-token": self.token}, cookies={"auth_sid": self.auth_sid})
@@ -35,6 +39,8 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_keys(response, expected_fields)
 
     @allure.description("Test for get user details with auth as other user")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.feature('Get user details', 'auth')
     def test_get_user_details_auth_as_other_user(self):
         response = RequestsHelper.get(f"/user/{int(self.user_id_from_auth_method)-1}",
                                       headers={"x-csrf-token": self.token}, cookies={"auth_sid": self.auth_sid})

@@ -29,6 +29,8 @@ class TestUserEdit(BaseCase):
         self.token = self.get_header(response1, "x-csrf-token")
 
     @allure.description("Test for edit first name for just created user")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.feature('Create user', 'Update user details', 'Get user details', 'auth')
     def test_edit_just_created_user(self):
         new_name = "changed_name"
         response2 = RequestsHelper.put(f"/user/{self.user_id}",
@@ -45,6 +47,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_json_value_by_name(response3, "firstName", new_name, "Wrong name of user after edit")
 
     @allure.description("Test for edit first name user without auth")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @allure.feature('Create user', 'Update user details', 'Get user details')
     def test_edit_user_without_auth(self):
         new_name = "Olga"
         response2 = RequestsHelper.put(f"/user/{self.user_id}",
@@ -54,6 +58,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_response_content(response2, "Auth token not supplied")
 
     @allure.description("Test for edit last name user with auth as other user")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.feature('Create user', 'Update user details', 'auth')
     def test_edit_user_with_auth_as_other_user(self):
         last_name = "Boyko"
 
@@ -72,6 +78,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 400)
 
     @allure.description("Test for check edit user with invalid email")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.feature('Create user', 'Update user details', 'auth')
     def test_edit_user_with_invalid_email(self):
         new_email = "noname.ya.ru"
 
@@ -84,6 +92,8 @@ class TestUserEdit(BaseCase):
         Assertions.assert_response_content(response2, "Invalid email format")
 
     @allure.description("Test for check edit user with short first name")
+    @allure.severity(allure.severity_level.MINOR)
+    @allure.feature('Create user', 'Update user details', 'auth')
     def test_edit_user_with_short_first_name(self):
         response2 = RequestsHelper.put(f"/user/{self.user_id}",
                                        data={"firstName": self.get_random_string(1)},
